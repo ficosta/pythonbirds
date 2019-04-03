@@ -82,13 +82,16 @@ os seguintes atributos:
     >>> carro.calcular_velocidade()
     0
     >>> carro.calcular_direcao()
-    Norte
+    'Norte'
     >>> carro.girar_a_direita()
-    Leste
+    >>> carro.calcular_direcao()
+    'Leste'
     >>> carro.girar_a_esquerda()
-    Norte
+    >>> carro.calcular_direcao()
+    'Norte'
     >>> carro.girar_a_esquerda()
-    Oeste
+    >>> carro.calcular_direcao()
+    'Oeste'
 
 """
 NORTE = 'Norte'
@@ -141,7 +144,7 @@ class Carro():
         self.direcao = direcao
 
     def calcular_velocidade(self):
-        print(self.motor.velocidade)
+        return self.motor.velocidade
 
     def acelerar(self):
         self.motor.acelerar()
@@ -150,12 +153,10 @@ class Carro():
         self.motor.frear()
 
     def calcular_direcao(self):
-        print(self.direcao.valor)
+        return self.direcao.valor
 
     def girar_a_direita(self):
         self.direcao.girar_a_direita()
-        self.calcular_direcao()
 
     def girar_a_esquerda(self):
         self.direcao.girar_a_esquerda()
-        self.calcular_direcao()
