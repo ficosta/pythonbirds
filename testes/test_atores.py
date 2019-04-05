@@ -144,7 +144,7 @@ class ObstaculoTestes(TestCase):
 
 
 class PorcoTestes(TestCase):
-    def teste_status(self):
+    def  teste_status(self):
         porco = Porco()
         self.assertEqual('@', porco.caracter())
         outro_ator_na_mesma_posicao = Ator()

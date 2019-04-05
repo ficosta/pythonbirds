@@ -2,7 +2,6 @@
 from itertools import chain
 from atores import ATIVO
 
-
 VITORIA = 'VITORIA'
 DERROTA = 'DERROTA'
 EM_ANDAMENTO = 'EM_ANDAMENTO'
@@ -35,7 +34,6 @@ class Fase():
         self._passaros = []
         self._porcos = []
         self._obstaculos = []
-
 
     def adicionar_obstaculo(self, *obstaculos):
         """
@@ -90,8 +88,9 @@ class Fase():
         :param angulo: ângulo de lançamento
         :param tempo: Tempo de lançamento
         """
-        pass
-
+        for passaro in self._passaros:
+            if not passaro.foi_lancado():
+                passaro.lancar(angulo, tempo)
 
     def calcular_pontos(self, tempo):
         """
@@ -102,9 +101,24 @@ class Fase():
         :param tempo: tempo para o qual devem ser calculados os pontos
         :return: objeto do tipo Ponto
         """
-        pontos=[]
-
+        pontos = [self._calcular_ponto_de_passaro(p, tempo) for p in self._passaros]
+        obstaculos_e_porcos = chain(self._obstaculos, self._porcos)
+        pontos.extend([self._transformar_em_ponto(ator) for ator in obstaculos_e_porcos])
         return pontos
+
+    def _calcular_ponto_de_passaro(self, passaro, tempo, ):
+        passaro.calcular_posicao(tempo)
+        for ator in chain(self._obstaculos, self._porcos):
+            if ATIVO == passaro.status:
+                passaro.colidir(ator, self.intervalo_de_colisao)
+                passaro.colidir_com_chao()
+            else:
+                break
+        return self._transformar_em_ponto(passaro)
+
+
+    def _transformar_em_pontos(self, ator):
+        return Ponto(ator.x, ator.y, ator.caracter())
 
     def _existe_porco_ativo(self):
         return self._verificar_se_existe_ator_ativo(self._porcos)

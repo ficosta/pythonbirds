@@ -37,7 +37,8 @@ class Ator():
         :param tempo: o tempo do jogo
         :return: posição x, y do ator
         """
-        return 1, 1
+
+        return self.x, self.y
 
     def colidir(self, outro_ator, intervalo=1):
         """
@@ -51,9 +52,12 @@ class Ator():
         :param intervalo: Intervalo a ser considerado
         :return:
         """
-        if (self.x, self.y) == (outro_ator.x, outro_ator.y):
-            self.status = 'destruido'
+        if self.status == ATIVO and outro_ator.status == ATIVO:
+            delta_x = abs(self.x - outro_ator.x)
+            delta_y = abs(self.y - outro_ator.y)
 
+            if delta_x <= 1 and delta_y <= intervalo:
+                self.status = outro_ator.status = DESTRUIDO
 
 
 class Obstaculo(Ator):
@@ -62,6 +66,7 @@ class Obstaculo(Ator):
 
 class Porco(Ator):
     _caracter_ativo = '@'
+    _caracter_destruido = '+'
 
 
 class Passaro(Ator):
@@ -89,7 +94,7 @@ class Passaro(Ator):
 
         :return: booleano
         """
-        return True
+        return self._tempo_de_lancamento is not None
 
     def colidir_com_chao(self):
         """
@@ -97,7 +102,8 @@ class Passaro(Ator):
         o status dos Passaro deve ser alterado para destruido, bem como o seu caracter
 
         """
-        pass
+        if self.y <= 0:
+            self.status = DESTRUIDO
 
     def calcular_posicao(self, tempo):
         """
@@ -115,7 +121,6 @@ class Passaro(Ator):
         """
         return 1, 1
 
-
     def lancar(self, angulo, tempo_de_lancamento):
         """
         Lógica que lança o pássaro. Deve armazenar o ângulo e o tempo de lançamento para posteriores cálculo.
@@ -125,12 +130,16 @@ class Passaro(Ator):
         :param tempo_de_lancamento:
         :return:
         """
-        pass
+        self._angulo_de_lancamento = angulo
+        self._tempo_de_lancamento = tempo_de_lancamento
 
 
 class PassaroAmarelo(Passaro):
     _caracter_ativo = 'A'
-
+    _caracter_destruido = 'a'
+    velocidade_escalar = 30
 
 class PassaroVermelho(Passaro):
     _caracter_ativo = 'V'
+    _caracter_destruido = 'v'
+    velocidade_escalar = 20
