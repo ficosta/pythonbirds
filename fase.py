@@ -117,7 +117,7 @@ class Fase():
         return self._transformar_em_ponto(passaro)
 
 
-    def _transformar_em_pontos(self, ator):
+    def _transformar_em_ponto(self, ator):
         return Ponto(ator.x, ator.y, ator.caracter())
 
     def _existe_porco_ativo(self):
